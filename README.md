@@ -9,22 +9,23 @@ The ONLY package it will install to your system (and in user-space, only) is vir
 
 Normally you would do this:
 ```
-import numpy
+import tornado
 ```
-and of course your system may complain that numpy wasn't found.
+and of course your system may complain that tornado wasn't found. And so you want to create a virtualenv, go Googling for how to create a virtualenv, create the virtualenv, install tornado, and run your python script.
 
 With magicimport.py you can do this:
 ```
 from magicimport import magicimport
-numpy = magicimport("tornado")
+tornado = magicimport("tornado")
 ```
 and BAM, you have numpy, no qusetions asked.
 
 You can even specify a version number that you would like, e.g.
 ```
 from magicimport import magicimport
-numpy = magicimport("tornado", version = "4.5")
+tornado = magicimport("tornado", version = "4.5")
 ```
+
 and you will get that exact version.
 
 Enjoy!
