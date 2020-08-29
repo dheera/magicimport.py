@@ -20,12 +20,9 @@ if "reload" not in dir(importlib):
         # old old python polyfill
         importlib.reload = reload
 
-try:
-    from importlib.metadata import version as get_version
-except ImportError:
-    def get_version(module_name):
-        m = importlib.import_module(module_name)
-        return m.__version__ if "__version__" in dir(m) else m.version
+def get_version(module_name):
+    m = importlib.import_module(module_name)
+    return m.__version__ if "__version__" in dir(m) else m.version
 
 if os.system("virtualenv --version > /dev/null") != 0:
     print("virtualenv not found, installing ...", file = sys.stderr)
@@ -66,9 +63,24 @@ def compare_version(target, actual):
 
     if len(target.split(".")) < len(actual.split(".")):
         target = target + "."
+
+    if len(target.split(".")) > len(actual.split(".")):
+        target = ".".join(target.split(".")[0:len(actual.split("."))])
+
     return actual.startswith(target)
 
-def magicimport(name, version = None):
+def magicimport(name, version = None, package_name = None):
+    """
+    Imports a module (install it first if it doesn't exist) and returns it. How to use:
+    tensorflow = magicimport("tensorflow")    # import tensorflow
+    tf = magicimport("tensorflow")            # import tensorflow as tf
+
+    # if you want a specific version:
+    tf = magicimport("tensorflow", version = "2.2")
+
+    # if the pip name isn't the same as the python name:
+    cv2 = magicimport("cv2", version = "4.4.0.42", package_name = "opencv-python")
+    """
     try:
         if version is not None and not compare_version(version, get_version(name)):
             raise ImportError("Wrong version: expected %s got %s" % (version, get_version(name)))
@@ -76,9 +88,15 @@ def magicimport(name, version = None):
 
     except ImportError:
         print("installing %s ..." % name, file = sys.stderr)
-        install_target = name
+
+        if package_name is not None:
+            install_target = package_name
+        else:
+            install_target = name
+
         if version is not None:
             install_target += "==" + version
+
         os.system("%s -c \"source %s && %s install %s\"" % (BASH, os.path.join("venv", "bin", "activate"), PIP, install_target))
 
         if "invalidate_caches" in dir(importlib):
