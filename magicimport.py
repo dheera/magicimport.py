@@ -82,9 +82,10 @@ def magicimport(name, version = None, package_name = None):
     cv2 = magicimport("cv2", version = "4.4.0.42", package_name = "opencv-python")
     """
     try:
+        out = importlib.import_module(name)
+
         if version is not None and not compare_version(version, get_version(name)):
             raise ImportError("Wrong version: expected %s got %s" % (version, get_version(name)))
-        out = importlib.import_module(name)
 
     except ImportError:
         print("installing %s ..." % name, file = sys.stderr)
