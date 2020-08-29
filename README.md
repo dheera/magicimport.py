@@ -34,4 +34,4 @@ Enjoy!
 
 0. Is this production ready?
 
-No. Don't use this in production. This is mostly just a script for convenience for small personal projects and hacks.
+No. Don't use this in production. This is mostly just a convenience hack for small personal projects.
