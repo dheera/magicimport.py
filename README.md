@@ -2,7 +2,7 @@
 
 ## Motivation
 
-We're making L5 autonomous cars, but for some reason we can't seem to make L5 autonomous software that "just works". I would like to think that much like you can get in an autonomous car and it gets you to your destination without questions, a piece of software (that you wrote, and can trust) can intelligently figure out how to run itself without complaining, and in a sandboxed fashion that doesn't mess up your system.
+We're making L5 autonomous cars, but for some reason we can't seem to make L5 autonomous software that "just works". I would like to think that much like you can get in an autonomous car and it gets you to your destination without questions, a piece of software (that either you wrote or can trust) can intelligently figure out how to run itself without complaining, and in a sandboxed fashion that doesn't mess up your system.
 
 ## What it is
 
