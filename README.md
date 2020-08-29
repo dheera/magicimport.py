@@ -1,6 +1,6 @@
 # magicimport.py
 
-We're making L5 autonomous cars, but for some reason we can't make L5 autonomous software that "just works".
+We're making L5 autonomous cars, but for some reason we can't seem to make L5 autonomous software that "just works".
 
 The idea of magicimport.py is to allow an arbitrary piece of Python code to fetch its own dependencies and versions at runtime and "just run", no questions asked, without fuss.
 Behind the hood it uses virtualenv to create a virtual environment and install its dependencies there without messing with your system Python packages.
