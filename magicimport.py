@@ -11,7 +11,7 @@ PIP = "pip%d" % sys.version_info.major
 PYTHON = sys.executable
 BASH = "/bin/bash"
 
-if "reload" not in importlib:
+if "reload" not in dir(importlib):
     try:
         # old python polyfill
         import imp
