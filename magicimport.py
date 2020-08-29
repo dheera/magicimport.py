@@ -1,10 +1,22 @@
 #!/usr/bin/env python3
 
 import importlib
-import importlib.metadata
 import json
 import os
 import sys
+
+try:
+    from importlib.metadata import version as get_version
+except ImportError:
+    def get_version(module_name):
+        module = importlib.__import__(module_name)
+        if "__version__" in dir(module):
+            return module.__version__
+        if "version" in dir(module):
+            return module.version
+        if "VERSION" in dir(module):
+            return module.VERSION
+        return Exception("could not get version number of %s" % module_name)
 
 PIP = "pip"
 PYTHON = "python"
