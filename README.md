@@ -29,3 +29,9 @@ tornado = magicimport("tornado", version = "4.5")
 and you will get that exact version.
 
 Enjoy!
+
+## FAQ
+
+0. Is this production ready?
+
+No. Don't use this in production. This is mostly just a script for convenience for small personal projects and hacks.
