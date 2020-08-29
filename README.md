@@ -42,4 +42,4 @@ No. Don't use this in production. This is mostly just a convenience hack for sma
 
 1. Does it work with Python 2?
 
-No. Not yet, but people should move to Python 3 already.
+I think so. I've tested it on 20.04 with 3.8.3 and 18.04 with 2.7.17 and 3.6.9. I haven't tested other configurations.
