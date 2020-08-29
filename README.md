@@ -18,7 +18,7 @@ With magicimport.py you can do this:
 from magicimport import magicimport
 tornado = magicimport("tornado")
 ```
-and BAM, you have tornado, no qusetions asked.
+and BAM, you have tornado, no questions asked.
 
 You can even specify a version number that you would like, e.g.
 ```
@@ -36,6 +36,6 @@ Enjoy!
 
 No. Don't use this in production. This is mostly just a convenience hack for small personal projects.
 
-1. Doee it work with Python 2?
+1. Does it work with Python 2?
 
 No. Not yet, but people should move to Python 3 already.
