@@ -18,7 +18,7 @@ With magicimport.py you can do this:
 from magicimport import magicimport
 tornado = magicimport("tornado")
 ```
-and BAM, you have numpy, no qusetions asked.
+and BAM, you have tornado, no qusetions asked.
 
 You can even specify a version number that you would like, e.g.
 ```
