@@ -11,6 +11,15 @@ PIP = "pip%d" % sys.version_info.major
 PYTHON = sys.executable
 BASH = "/bin/bash"
 
+if "reload" not in importlib:
+    try:
+        # old python polyfill
+        import imp
+        importlib.reload = imp.reload
+    except ImportError:
+        # old old python polyfill
+        importlib.reload = reload
+
 try:
     from importlib.metadata import version as get_version
 except ImportError:
