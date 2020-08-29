@@ -35,3 +35,7 @@ Enjoy!
 0. Is this production ready?
 
 No. Don't use this in production. This is mostly just a convenience hack for small personal projects.
+
+1. Doee it work with Python 2?
+
+No. Not yet, but people should move to Python 3 already.
