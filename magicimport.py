@@ -1,5 +1,7 @@
 #!/usr/bin/env python3
 
+from __future__ import print_function
+
 import importlib
 import json
 import os
@@ -20,7 +22,8 @@ try:
     import virtualenv
 except ImportError:
     print("installing virtualenv ...", file = sys.stderr)
-    os.system("%s install virtualenv" % PIP)
+    if os.system("%s install virtualenv" % PIP) != 0:
+        raise Exception("Could not install virtualenv. Maybe %s is missing? That's the one thing I won't try to auto-install." % PIP)
     import virtualenv
 
 if not os.path.exists("venv"):
@@ -62,7 +65,7 @@ def compare_version(target, actual):
 def magicimport(name, version = None):
     try:
         if version is not None and not compare_version(version, get_version(name)):
-            raise ImportError("wrong version: expected %s got %s" % (version, get_version(name)))
+            raise ImportError("Wrong version: expected %s got %s" % (version, get_version(name)))
         out = importlib.import_module(name)
 
     except ImportError:
@@ -77,6 +80,6 @@ def magicimport(name, version = None):
         out = importlib.reload(out)
 
         if version is not None and not compare_version(version, get_version(name)):
-            raise ImportError("wrong version: expected %s and tried very hard to install it but still got %s" % (version, get_version(name)))
+            raise ImportError("Wrong version: expected %s and tried very hard to install it but still got %s" % (version, get_version(name)))
 
     return out
