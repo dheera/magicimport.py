@@ -72,7 +72,8 @@ def magicimport(name, version = None):
             install_target += "==" + version
         os.system("%s -c \"source %s && %s install %s\"" % (BASH, os.path.join("venv", "bin", "activate"), PIP, install_target))
 
-        importlib.invalidate_caches()
+        if "invalidate_caches" in dir(importlib):
+            importlib.invalidate_caches()
         out = importlib.import_module(name)
         out = importlib.reload(out)
 
