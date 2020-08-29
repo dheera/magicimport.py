@@ -5,22 +5,16 @@ import json
 import os
 import sys
 
+PIP = "pip%d" % sys.version_info.major
+PYTHON = sys.executable
+BASH = "/bin/bash"
+
 try:
     from importlib.metadata import version as get_version
 except ImportError:
     def get_version(module_name):
-        module = importlib.__import__(module_name)
-        if "__version__" in dir(module):
-            return module.__version__
-        if "version" in dir(module):
-            return module.version
-        if "VERSION" in dir(module):
-            return module.VERSION
-        return Exception("could not get version number of %s" % module_name)
-
-PIP = "pip"
-PYTHON = "python"
-BASH = "/bin/bash"
+        m = importlib.import_module(module_name)
+        return m.__version__ if "__version__" in dir(m) else m.version
 
 try:
     import virtualenv
@@ -47,9 +41,9 @@ sys.path.insert(0, os.path.join("venv", "lib", python_lib_dir, "site-packages"))
 
 def magicimport(name, version = None):
     try:
-        if version is not None and importlib.metadata.version(name) != version:
-            raise ImportError("wrong version: expected %s got %s" % (version, importlib.metadata.version(name)))
-        out = importlib.__import__(name)
+        if version is not None and get_version(name) != version:
+            raise ImportError("wrong version: expected %s got %s" % (version, get_version(name)))
+        out = importlib.import_module(name)
 
     except ImportError:
         print("installing %s ..." % name, file = sys.stderr)
@@ -57,9 +51,12 @@ def magicimport(name, version = None):
         if version is not None:
             install_target += "==" + version
         os.system("%s -c \"source %s && %s install %s\"" % (BASH, os.path.join("venv", "bin", "activate"), PIP, install_target))
-        out = importlib.__import__(name)
 
-        if version is not None and importlib.metadata.version(name) != version:
-            raise ImportError("wrong version: expected %s and tried very hard to install it but still got %s" % (version, importlib.metadata.version(name)))
+        importlib.invalidate_caches()
+        out = importlib.import_module(name)
+        out = importlib.reload(out)
+
+        if version is not None and get_version(name) != version:
+            raise ImportError("wrong version: expected %s and tried very hard to install it but still got %s" % (version, get_version(name)))
 
     return out

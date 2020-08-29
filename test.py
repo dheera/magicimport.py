@@ -3,10 +3,11 @@
 from magicimport import magicimport
 
 flask = magicimport("flask")
-print(flask)
-
 tqdm = magicimport("tqdm")
-print(tqdm)
-
 tornado = magicimport("tornado", version = "4.5")
-print(tornado)
+
+print("imported:")
+
+print(flask, "version:", flask.__version__)
+print(tqdm, "version:", tqdm.__version__)
+print(tornado, "version:", tornado.version)
