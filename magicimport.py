@@ -18,13 +18,10 @@ except ImportError:
         m = importlib.import_module(module_name)
         return m.__version__ if "__version__" in dir(m) else m.version
 
-try:
-    import virtualenv
-except ImportError:
-    print("installing virtualenv ...", file = sys.stderr)
+if os.system("virtualenv --version > /dev/null") != 0:
+    print("virtualenv not found, installing ...", file = sys.stderr)
     if os.system("%s install virtualenv" % PIP) != 0:
         raise Exception("Could not install virtualenv. Maybe %s is missing? That's the one thing I won't try to auto-install." % PIP)
-    import virtualenv
 
 if not os.path.exists("venv"):
     print("creating virtualenv venv ...", file = sys.stderr)
