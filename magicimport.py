@@ -21,7 +21,7 @@ if not os.path.exists("venv"):
     print("creating virtualenv venv ...", file = sys.stderr)
     os.system("%s -m virtualenv venv" % PYTHON)
 
-with os.popen("%s -c \"source %s; %s -c \'import json, os; print(json.dumps(dict(os.environ)))\'\"" % (
+with os.popen("%s -c \"source %s && %s -c \'import json, os; print(json.dumps(dict(os.environ)))\'\"" % (
         BASH,
         os.path.join("venv", "bin", "activate"),
         PYTHON,
@@ -44,7 +44,7 @@ def magicimport(name, version = None):
         install_target = name
         if version is not None:
             install_target += "==" + version
-        os.system("%s -c \"source %s; %s install %s\"" % (BASH, os.path.join("venv", "bin", "activate"), PIP, install_target))
+        os.system("%s -c \"source %s && %s install %s\"" % (BASH, os.path.join("venv", "bin", "activate"), PIP, install_target))
         out = importlib.__import__(name)
 
         if version is not None and importlib.metadata.version(name) != version:

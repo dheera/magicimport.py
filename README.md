@@ -9,7 +9,7 @@ We're making L5 autonomous cars, but for some reason we can't seem to make L5 au
 The idea of magicimport.py is to allow an arbitrary piece of Python code to fetch its own dependencies and versions at runtime and "just run", no questions asked, without fuss.
 Behind the hood it uses virtualenv to create a virtual environment and install its dependencies there without messing with your system Python packages.
 
-The ONLY package it will install to your system (and in user-space, only) is virtualenv itself, if you don't already have it.
+The ONLY package it will automatically install to your system (and in user-space, only) is virtualenv itself, if you don't already have it. It will not ask you for root permissions. Any other packages will be installed to the virtualenv that it creates.
 
 Normally you would do this:
 ```
