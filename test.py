@@ -2,10 +2,11 @@
 
 from magicimport import magicimport
 
-numpy = magicimport("numpy", version = "1.17")
-numba = magicimport("numba")
-tornado = magicimport("tornado")
 flask = magicimport("flask")
-tqdm = magicimport("tqdm")
+print(flask)
 
-print(numpy, numba, tornado, flask, tqdm)
+tqdm = magicimport("tqdm")
+print(tqdm)
+
+tornado = magicimport("tornado", version = "4.5")
+print(tornado)

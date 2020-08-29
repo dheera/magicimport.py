@@ -1,10 +1,10 @@
 #!/usr/bin/env python3
 
 import importlib
+import importlib.metadata
 import json
 import os
 import sys
-from pprint import pprint
 
 PIP = "pip"
 PYTHON = "python"
@@ -31,14 +31,13 @@ with os.popen("%s -c \"source %s; %s -c \'import json, os; print(json.dumps(dict
         os.environ[key] = venv_environ[key]
 
 python_lib_dir = os.listdir(os.path.join("venv", "lib"))[0]
-sys.path.append(os.path.join("venv", "lib", python_lib_dir, "site-packages"))
+sys.path.insert(0, os.path.join("venv", "lib", python_lib_dir, "site-packages"))
 
 def magicimport(name, version = None):
     try:
+        if version is not None and importlib.metadata.version(name) != version:
+            raise ImportError("wrong version: expected %s got %s" % (version, importlib.metadata.version(name)))
         out = importlib.__import__(name)
-        if version is not None:
-            if out.__version__ != version:
-                raise ImportError("wrong version: expected %s got %s" % (version, out.__version__))
 
     except ImportError:
         print("installing %s ..." % name, file = sys.stderr)
@@ -47,5 +46,8 @@ def magicimport(name, version = None):
             install_target += "==" + version
         os.system("%s -c \"source %s; %s install %s\"" % (BASH, os.path.join("venv", "bin", "activate"), PIP, install_target))
         out = importlib.__import__(name)
+
+        if version is not None and importlib.metadata.version(name) != version:
+            raise ImportError("wrong version: expected %s and tried very hard to install it but still got %s" % (version, importlib.metadata.version(name)))
 
     return out
