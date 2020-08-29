@@ -1,4 +1,4 @@
-# magicimport.py
+# magicimport.py: Python code that doesn't complain
 
 ## Motivation
 
