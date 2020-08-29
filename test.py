@@ -2,7 +2,7 @@
 
 from magicimport import magicimport
 
-numpy = magicimport("numpy")
+numpy = magicimport("numpy", version = "1.17")
 numba = magicimport("numba")
 tornado = magicimport("tornado")
 flask = magicimport("flask")

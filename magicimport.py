@@ -33,12 +33,19 @@ with os.popen("%s -c \"source %s; %s -c \'import json, os; print(json.dumps(dict
 python_lib_dir = os.listdir(os.path.join("venv", "lib"))[0]
 sys.path.append(os.path.join("venv", "lib", python_lib_dir, "site-packages"))
 
-def magicimport(name):
+def magicimport(name, version = None):
     try:
         out = importlib.__import__(name)
+        if version is not None:
+            if out.__version__ != version:
+                raise ImportError("wrong version: expected %s got %s" % (version, out.__version__))
+
     except ImportError:
         print("installing %s ..." % name, file = sys.stderr)
-        os.system("%s -c \"source %s; %s install %s\"" % (BASH, os.path.join("venv", "bin", "activate"), PIP, name))
+        install_target = name
+        if version is not None:
+            install_target += "==" + version
+        os.system("%s -c \"source %s; %s install %s\"" % (BASH, os.path.join("venv", "bin", "activate"), PIP, install_target))
         out = importlib.__import__(name)
 
     return out
