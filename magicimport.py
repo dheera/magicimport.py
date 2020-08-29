@@ -39,9 +39,29 @@ with os.popen("%s -c \"source %s && %s -c \'import json, os; print(json.dumps(di
 python_lib_dir = os.listdir(os.path.join("venv", "lib"))[0]
 sys.path.insert(0, os.path.join("venv", "lib", python_lib_dir, "site-packages"))
 
+def compare_version(target, actual):
+    """
+    Return true if it is a version match.
+    2, 2 -> True
+    2, 2.4 -> True
+    2, 2.4.1 -> True
+    2.4, 2.4.1 -> True
+    2.4.1, 2.4.1 -> True
+
+    2.4.1, 2.4 -> False
+    2.4.1, 2.4.0 -> False
+    2.4.1, 1.9.0 -> False
+
+    etc.
+    """
+
+    if len(target.split(".")) < len(actual.split(".")):
+        target = target + "."
+    return actual.startswith(target)
+
 def magicimport(name, version = None):
     try:
-        if version is not None and get_version(name) != version:
+        if version is not None and not compare_version(version, get_version(name)):
             raise ImportError("wrong version: expected %s got %s" % (version, get_version(name)))
         out = importlib.import_module(name)
 
@@ -56,7 +76,7 @@ def magicimport(name, version = None):
         out = importlib.import_module(name)
         out = importlib.reload(out)
 
-        if version is not None and get_version(name) != version:
+        if version is not None and not compare_version(version, get_version(name)):
             raise ImportError("wrong version: expected %s and tried very hard to install it but still got %s" % (version, get_version(name)))
 
     return out
