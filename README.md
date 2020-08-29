@@ -16,14 +16,14 @@ and of course your system may complain that numpy wasn't found.
 With magicimport.py you can do this:
 ```
 from magicimport import magicimport
-numpy = magicimport("numpy")
+numpy = magicimport("tornado")
 ```
 and BAM, you have numpy, no qusetions asked.
 
 You can even specify a version number that you would like, e.g.
 ```
 from magicimport import magicimport
-numpy = magicimport("numpy==1.18.5")
+numpy = magicimport("tornado", version = "4.5")
 ```
 and you will get that exact version.
 
