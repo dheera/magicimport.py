@@ -15,7 +15,7 @@ Normally you would do this:
 ```
 import tornado
 ```
-and of course your system may complain that tornado wasn't found. And so you want to create a virtualenv, go Googling for how to create a virtualenv, create the virtualenv, install tornado, and run your python script.
+and of course your system may complain that tornado wasn't found. And so you want to create a virtualenv, go Googling for how to create a virtualenv, create the virtualenv, install tornado, and run your python script. Or apt-get install python3-tornado, but you might not get the version you want, and another package may upgrade it to tornado 5.x when you want 4.x.
 
 With magicimport.py you can do this:
 ```
