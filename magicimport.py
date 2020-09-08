@@ -5,11 +5,21 @@ from __future__ import print_function
 import importlib
 import json
 import os
+import random
 import sys
 
 PIP = "pip%d" % sys.version_info.major
 PYTHON = sys.executable
 BASH = "/bin/bash"
+
+try:
+    VENV = os.path.join(os.path.dirname(os.path.realpath(__file__)), "venv.magicimport")
+except NameError:
+    VENV = "venv.magicimport"
+
+if not os.access(VENV, os.W_OK):
+    VENV = "/tmp/venv.magicimport.%d" % random.randint(100000,999999)
+
 
 if "reload" not in dir(importlib):
     try:
@@ -29,21 +39,21 @@ if os.system("virtualenv --version > /dev/null") != 0:
     if os.system("%s install virtualenv" % PIP) != 0:
         raise Exception("Could not install virtualenv. Maybe %s is missing? That's the one thing I won't try to auto-install." % PIP)
 
-if not os.path.exists("venv"):
+if not os.path.exists(VENV):
     print("creating virtualenv venv ...", file = sys.stderr)
-    os.system("%s -m virtualenv venv" % PYTHON)
+    result = os.system("%s -m virtualenv %s" % (PYTHON, VENV))
 
 with os.popen("%s -c \"source %s && %s -c \'import json, os; print(json.dumps(dict(os.environ)))\'\"" % (
         BASH,
-        os.path.join("venv", "bin", "activate"),
+        os.path.join(VENV, "bin", "activate"),
         PYTHON,
     )) as p:
     venv_environ = json.loads(p.read())
     for key in venv_environ:
         os.environ[key] = venv_environ[key]
 
-python_lib_dir = os.listdir(os.path.join("venv", "lib"))[0]
-sys.path.insert(0, os.path.join("venv", "lib", python_lib_dir, "site-packages"))
+python_lib_dir = os.listdir(os.path.join(VENV, "lib"))[0]
+sys.path.insert(0, os.path.join(VENV, "lib", python_lib_dir, "site-packages"))
 
 def compare_version(target, actual):
     """
@@ -98,7 +108,7 @@ def magicimport(name, version = None, package_name = None):
         if version is not None:
             install_target += "==" + version
 
-        os.system("%s -c \"source %s && %s install %s\"" % (BASH, os.path.join("venv", "bin", "activate"), PIP, install_target))
+        os.system("%s -c \"source %s && %s install %s\"" % (BASH, os.path.join(VENV, "bin", "activate"), PIP, install_target))
 
         if "invalidate_caches" in dir(importlib):
             importlib.invalidate_caches()
